@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.mapper.CommentMapper">
+	<select id="getClist" parameterType="String" resultType="com.test.domain.CommentDTO">
+	select 
+	    fr.freply_seq,
+	    fr.content, 
+	    m.nickname,
+	    fr.regdate
+	from tblFreeReply fr
+	 inner join tblMember m
+	    on fr.member_seq = m.member_seq
+	        where fr.free_seq = #{free_seq}
+	</select>
+
+	<insert id="add" parameterType="com.test.domain.CommentDTO">
+	insert into tblFreeReply values(freply_seq.nextVal, #{content}, default, #{free_seq}, 3)
+	</insert>
+
+</mapper>

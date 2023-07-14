@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.mapper.BoardMapper">
+	<select id="getBlist" resultType="com.test.domain.BoardDTO">
+		select
+			f.free_seq,
+			f.category,
+			f.title,
+			f.content,
+			m.member_seq,
+			m.nickname,
+			f.regdate,
+			f.readcount,
+			f.ccount, 
+			f.recommend
+		from vwFree f
+			inner join tblMember m
+				on f.member_seq = m.member_seq
+					order by f.free_seq desc
+	</select>
+
+	<select id="get" parameterType="String"
+		resultType="com.test.domain.BoardDTO">
+		select
+			f.free_seq,
+			f.category,
+			f.title,
+			f.content,
+			m.nickname,
+			m.member_seq,
+			f.regdate,
+			f.readcount,
+			f.report,
+			f.recommend
+		from vwFree f
+			inner join tblMember m
+				on f.member_seq = m.member_seq where free_seq = #{free_seq}
+	</select>
+	
+	<!-- 게시글에 달린 댓글 개수 -->
+	<select id="getCcount" parameterType="String" resultType="Integer">
+		select count(*) from tblFreeReply where free_seq = #{free_seq}
+	</select>
+	
+
+	<select id="getClist" parameterType="String"
+		resultType="com.test.domain.CommentDTO">
+		select 
+		    fr.freply_seq,
+		    fr.content, 
+		    m.nickname,
+		    fr.regdate,
+		    fr.free_seq,
+		    fr.member_seq
+		from tblFreeReply fr
+		 inner join tblMember m
+		    on fr.member_seq = m.member_seq
+		        where fr.free_seq = #{free_seq}
+		        	order by fr.regdate asc
+	</select>
+
+	<update id="updateReadCount" parameterType="String">
+		update tblFree set readcount = readcount + 1 where free_seq = #{free_seq}
+	</update>
+	
+	<!-- 게시판 등록, 수정, 삭제 -->
+	<!-- 등록 -->
+	<insert id="add" parameterType="com.test.domain.BoardDTO">
+		insert into tblFree values(free_seq.nextVal, #{title}, #{content}, #{category}, #{fname}, default, default, default, default, #{session_member_seq}, default)
+	</insert>
+	
+	<update id="edit" parameterType="com.test.domain.BoardDTO" >
+		update tblFree set title = #{title}, content = #{content} 
+			where free_seq = #{free_seq}
+	</update>
+	
+	<delete id="del" parameterType="String">
+		delete from tblFree where free_seq = #{free_seq}
+	</delete>
+	
+	<!-- 댓글 등록/수정/삭제 -->
+	<insert id="addComment" parameterType="com.test.domain.CommentDTO">
+	insert into tblFreeReply values(freply_seq.nextVal, #{content}, default, #{free_seq}, #{session_member_seq})
+	</insert>
+	
+	<select id="getComment" parameterType="String">
+		select content from tblFreeReply where freply_seq = #{freply_seq}
+	</select>
+	
+	<delete id="delComment" parameterType="String">
+		delete from tblFreeReply where freply_seq = #{freply_seq}
+	</delete>
+	
+	<update id="editOkComment" parameterType="com.test.domain.CommentDTO">
+		update tblFreeReply set content = #{content} where freply_seq = #{freply_seq}
+	</update>
+	
+
+	<update id="boardReport" parameterType="String">
+	update tblFree set report = report + 1 where free_seq = #{free_seq}
+	</update>
+	
+	<update id="boardRecommend" parameterType="String">
+	update tblFree set recommend = recommend + 1 where free_seq = #{free_seq}
+	</update>
+
+</mapper>
+
+

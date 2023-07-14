@@ -1,0 +1,63 @@
+.chatcounseling {
+  position: fixed;
+  right: 45px;
+  bottom: 110px;
+  z-index: 11;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.chatcounseling.show {
+  opacity: 1;
+}
+
+.btn-lg-circle {
+    width: 46px;
+    height: 46px;
+    border-radius: 30px;
+}
+
+.w-height {
+    height: 40rem;
+    object-fit: cover;
+}
+
+.btn-chat {
+  color: #fff;
+  background-color: #fff;
+  background-image: url('/dreamjourney/resources/img/chatbutton/pngegg.png');
+  background-size: 60% auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-chat:hover {
+  background-color: #adb5bd2e;
+}
+
+.container_wj {
+	display:flex;
+	justify-content:center;
+	align-items:center;
+
+}
+
+.regicon_wj {
+	width:50%;
+	margin-left:5rem;
+	margin-top:3rem;
+}
+
+.container_regi {
+	width:60vw;
+	background-color:#fff;
+	height:90vh;
+	margin-top:30px;
+	margin-bottom:30px;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+
+ 

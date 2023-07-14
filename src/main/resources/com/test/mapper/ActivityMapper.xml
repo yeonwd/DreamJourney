@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.ActivityMapper">
+
+   <!-- 액티비티 전체 목록 -->
+   <select id="activitylist" resultType="com.test.domain.ActivityDTO">
+      select * from tblActivity
+   </select>
+   
+   <!-- 액티비티 전체 목록2 -->
+   <select id="activitylist2" resultType="com.test.domain.ActivityDTO">
+     select * from tblActivity
+   </select>
+   
+   <!-- 액티비티 상세보기 -->
+   <select id="get" resultType="com.test.domain.ActivityDTO" parameterType="String">
+      select * from tblActivity where activity_seq = #{activity_seq}
+   </select>
+   
+   <!-- 리뷰 보기 -->
+   <select id="review" resultType="com.test.domain.ReviewDTO" parameterType="String">
+      select * from vwActivityReview where activity_seq = #{activity_seq} order by rdate desc
+   </select>
+   
+   <!-- 리뷰 개수 -->
+   <select id="reviewCount" resultType="String" parameterType="String">
+       select count(activity_seq) as rcount from vwActivityReview where activity_seq=#{activity_seq}
+   </select>
+
+   <!-- 결제 가져오기 -->
+   <select id="pay" resultType="com.test.domain.ActivityDTO" parameterType="String">
+      select * from vwActivity where activity_seq = #{activity_seq} and adate = #{dates}
+   </select>
+   
+   <!-- adate_seq 찾기 -->
+   <select id="paydate" resultType="String" parameterType="String">
+          select adate_seq from tblActivityDate where adate = #{dates} and activity_seq = #{activity_seq}
+   </select>
+   
+   
+   <!-- 결제하기 -->
+   <insert id="payok">
+      insert into tblPay values ((select max(pay_seq) + 1 from tblPay), default, '신용카드', #{totalPrice}, #{member_seq}, #{adate_seq}, null, null, default)
+   </insert>
+   
+   <!-- 즐겨찾기 추가 -->
+   <insert id="bookmark_on">
+      insert into tblBookmark values((select * from (select max(bookmark_seq) + 1 from tblBookmark)), null, #{activity_seq}, #{member_seq}, null, null)
+   </insert>
+   
+   <!-- 즐겨찾기 삭제 -->
+   <delete id="bookmark_off">
+      delete from tblBookmark where activity_seq = #{activity_seq} and member_seq=#{member_seq}
+   </delete>
+   
+   <!-- 액티비티 가능 날짜 -->
+   <select id="cal" resultType="String" parameterType="String">
+   	select to_char(adate, 'yyyy-mm-dd') as adate from tblActivityDate where activity_seq = #{activity_seq}
+   </select>
+   
+    <!-- 결제 가져오기 -->
+   <!-- <select id="rpay" resultType="com.test.domain.RoomDTO" parameterType="String">
+      select * from vwAccommodate where room_seq = #{room_seq} and rdate = #{dates}
+   </select> -->
+   
+   <!-- 평점 평균 -->
+   <select id="avgScore" resultType="String" parameterType="String">
+   		select round(avg(score) , 1) as avgscore from vwAvg where activity_seq = #{activity_seq}
+   </select>
+   
+   
+</mapper>

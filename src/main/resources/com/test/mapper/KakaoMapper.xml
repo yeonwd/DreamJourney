@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.mapper.KakaoMapper">
+	<select id="login" resultType="com.test.domain.MemberDTO">
+		select * from tblmember where name=#{name} and email=#{email}
+	</select>
+	
+	<select id="glogin" resultType="com.test.domain.MemberDTO">
+		select * from tblmember where email=#{email} and pw=#{pw}
+	</select>
+	
+	<update id="updatepw">
+		update tblmember set pw = #{pw} where email = #{email}
+	</update>
+	
+	<select id="idCheck" resultType="com.test.domain.MemberDTO">
+      	SELECT * FROM tblmember WHERE tel= #{tel}
+   	</select>
+	
+</mapper>
+
+
+
